@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Enunciado · PISID</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/assignment.css?v=1">
+</head>
+<body class="assignment-page">
+<div class="shell">
+<main class="assignment">
+<section class="assignment-hero" id="inicio">
+<div>
+<div class="assignment-eyebrow">Projeto piSID · 2026/2027</div>
+<h1>Projeto Labirinto</h1>
+<p>Constrói um jogador distribuído capaz de observar um labirinto em tempo real, preservar os dados, reagir a eventos e continuar saudável quando alguma componente falha.</p>
+
+</div>
+<div class="hero-system" aria-label="O PC3 comunica diretamente com o PC1 e com o PC2">
+<span class="hero-pc1">PC 1<small>MongoDB</small>
+</span>
+<span class="hero-pc2">PC 2<small>MySQL</small>
+</span>
+<span class="hero-pc3">PC 3<small>Controlo</small>
+</span>
+<i class="hero-link hero-link-12">
+</i>
+<i class="hero-link hero-link-31">
+</i>
+<i class="hero-link hero-link-32">
+</i>
+<em class="hero-protocols">MQTT + SSH</em>
+<strong>um sistema distribuído</strong>
+</div>
+</section>
+<nav class="assignment-index" aria-label="Índice do enunciado">
+<strong>Neste enunciado</strong>
+<a href="#missao">Missão</a>
+<a href="#competencias">Competências</a>
+<a href="#labirinto">Labirinto</a>
+<a href="#arquitetura">Arquitetura</a>
+<a href="#dados">Dados</a>
+<a href="#mqtt">MQTT</a>
+<a href="#android">Android</a>
+<a href="#criterios">Checklist</a>
+</nav>
+<section id="missao" class="assignment-section">
+<div class="section-number">01</div>
+<div class="section-copy">
+<div class="kicker">A missão</div>
+<h2>Não basta guardar dados: o sistema tem de compreender o jogo e sobreviver a falhas</h2>
+<p class="lead">No fim da simulação, o teu software deve saber exatamente quantos marsamis <strong>odd</strong> e <strong>even</strong> ficaram em cada sala. Durante o jogo, deve reconhecer oportunidades de pontuação e reagir em tempo real.</p>
+<div class="outcome-list">
+<article>
+<b>Distribuir</b>
+<span>Dados e processamento por, pelo menos, três computadores.</span>
+</article>
+<article>
+<b>Persistir</b>
+<span>Usar MongoDB e MySQL, com migração incremental e sem duplicações.</span>
+</article>
+<article>
+<b>Reagir</b>
+<span>Detetar anomalias, outliers, alertas e condições de atuação em segundos.</span>
+</article>
+<article>
+<b>Recuperar</b>
+<span>Tolerar falhas de computadores, bases de dados e processos.</span>
+</article>
+</div>
+</div>
+</section>
+<section id="competencias" class="assignment-section career-section">
+<div class="section-number">↗</div>
+<div class="section-copy">
+<div class="kicker">Preparação para o mundo empresarial</div>
+<h2>Competências que vais praticar num sistema próximo da realidade</h2>
+<p class="lead">Este projeto junta tecnologias, decisões de arquitetura e problemas que surgem em sistemas empresariais reais: distribuição, integração, falhas, segurança e evolução contínua.</p>
+<div class="competency-grid">
+<article><b>01</b><div><h3>Sistemas distribuídos</h3><p>Distribuir dados e processamento por, pelo menos, três computadores.</p></div></article>
+<article><b>02</b><div><h3>Persistência poliglota</h3><p>Combinar uma base relacional, MySQL, com uma base não relacional, MongoDB.</p></div></article>
+<article><b>03</b><div><h3>Tolerância a falhas</h3><p>Responder a crashes de bases de dados, computadores e componentes de software.</p></div></article>
+<article><b>04</b><div><h3>Distribuição sem redundância</h3><p>Repartir informação por vários PCs sem guardar inadvertidamente os mesmos dados mais do que uma vez.</p></div></article>
+<article><b>05</b><div><h3>Migração incremental</h3><p>Transferir dados entre bases de dados de forma contínua, controlada e reiniciável.</p></div></article>
+<article><b>06</b><div><h3>Troca de mensagens com MQTT</h3><p>Receber dados dos sensores e transportar informação entre computadores através de mensagens.</p></div></article>
+<article><b>07</b><div><h3>Qualidade dos dados</h3><p>Detetar dados anómalos, valores sujos e outliers antes de os encaminhar.</p></div></article>
+<article><b>08</b><div><h3>Tempo real</h3><p>Tomar decisões e atuar no sistema com granularidade de segundos.</p></div></article>
+<article><b>09</b><div><h3>Desenvolvimento multiplataforma</h3><p>Trabalhar com Python, PHP e Android Studio numa solução integrada.</p></div></article>
+<article><b>10</b><div><h3>Operação remota</h3><p>Comunicar entre computadores e gerir processos através de SSH.</p></div></article>
+<article><b>11</b><div><h3>Contentores</h3><p>Utilizar Docker para criar ambientes consistentes e reproduzíveis.</p></div></article>
+<article><b>12</b><div><h3>Requisitos em evolução</h3><p>Tomar decisões perante indefinições e adaptar a solução quando a especificação muda.</p></div></article>
+<article><b>13</b><div><h3>Segurança aplicacional</h3><p>Proteger formulários, consultas e dados contra SQL injection, acessos indevidos e outros ataques que possam comprometer a aplicação.</p></div></article>
+</div>
+</div>
+</section>
+<section id="labirinto" class="assignment-section">
+<div class="section-number">02</div>
+<div class="section-copy">
+<div class="kicker">O mundo do jogo</div>
+<h2>Um labirinto vivo, diferente para cada equipa</h2>
+<div class="split">
+<div>
+<p>Os marsamis começam distribuídos aleatoriamente, circulam pelos caminhos disponíveis e acabam por parar por cansaço ou por condições ambientais.</p>
+<ul class="clean-list">
+<li>Cada corredor liga apenas duas salas e permite a circulação num único sentido.</li>
+<li>Podem chegar e sair vários corredores de uma mesma sala.</li>
+<li>Sempre que um marsami entra ou sai de uma sala é ativado um sensor de passagem.</li>
+<li>Cada ativação do sensor corresponde a um único marsami: dois marsamis não podem entrar ou sair em conjunto.</li>
+<li>Cada corredor pode ser aberto ou fechado, permitindo ou impedindo a circulação.</li>
+<li>Existem marsamis odd e even.</li>
+<li>Ruído e temperatura excessivos terminam a simulação e fecham os corredores.</li>
+<li>Podem existir vários sensores de temperatura e de som no labirinto, identificados por nome e zona. Cada leitura continua a pertencer ao labirinto do <em>player</em> indicado na mensagem.</li>
+<li>O ar condicionado reduz a temperatura de forma incremental.</li>
+<li>Cada equipa começa com a mesma planta, mas as decisões sobre portas fazem os labirintos divergir.</li>
+</ul>
+</div>
+<figure class="visual-card">
+<img src="assets/enunciado/labirinto.png" alt="Exemplo visual do labirinto">
+<figcaption>Exemplo de monitorização de uma configuração do labirinto.</figcaption>
+</figure>
+</div>
+<div class="strategy-rules">
+<div class="score-rule">
+<div class="score-value">+1</div>
+<div>
+<h3>Encontra o equilíbrio</h3>
+<p>Quando odd = even numa sala, podes disparar um gatilho. Se a condição ainda for verdadeira, ganhas 1 ponto; se já tiver desaparecido, perdes 0,5. Só podes tentar três vezes por sala.</p>
+</div>
+</div>
+<div class="control-rule">
+<div class="control-symbol">⌁</div>
+<div>
+<h3>Prolonga a simulação</h3>
+<p>Não precisas de esperar passivamente pelo fim. Liga ou desliga o ar condicionado para controlar a temperatura e fecha ou abre corredores para reduzir os movimentos e, consequentemente, o ruído. Uma boa estratégia de atuação pode evitar que os limites sejam atingidos e que a simulação termine antes do necessário.</p>
+</div>
+</div>
+<div class="success-rule">
+<div class="success-symbol">★</div>
+<div>
+<h3>Mostra que a tua equipa domina o desafio</h3>
+<p>Uma equipa demonstra um bom desempenho quando, no fim da simulação, consegue indicar corretamente quantos marsamis odd e even estão em cada sala e, durante a simulação, obtém pontos com disparos certeiros dos gatilhos.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="arquitetura" class="assignment-section">
+<div class="section-number">03</div>
+<div class="section-copy">
+<div class="kicker">Arquitetura distribuída</div>
+<h2>Três papéis, uma única visão coerente do sistema</h2>
+<div class="architecture-map" role="img" aria-label="O simulador comunica apenas através de MQTT; o PC1 recebe as mensagens e aloja o mongos, que distribui dados por shards em pelo menos dois computadores escolhidos pela equipa; o PC2 mantém MySQL e a aplicação">
+<div class="arch-source"><span class="arch-source-icon">⌁</span><div><small>SIMULADOR / NUVEM</small><strong>Sensores e atuadores</strong></div><b>conhece apenas MQTT</b></div>
+<div class="network-topology"><span>PC 1</span><i>↔</i><strong>PC 3<small>ponto comum</small></strong><i>↔</i><span>PC 2</span><em>PC1 e PC2 não comunicam diretamente</em></div>
+<section class="mongo-cluster"><div class="mongo-cluster-head"><div><small>CAMADA DISTRIBUÍDA</small><h3>Cluster MongoDB</h3></div><span>3 réplicas</span></div><div class="mongo-nodes mongo-nodes-fixed"><article><div class="pc-label">PC 1</div><strong>Entrada MongoDB</strong><span>Consumidor MQTT · mongos · Shard A</span></article><article><div class="pc-label">PC ESCOLHIDO PELA EQUIPA</div><strong>Shard B</strong><span>PC3 ou um computador adicional acessível ao mongos</span></article><article class="mongo-external"><div class="pc-label">SIMULADOR</div><strong>Sem acesso aos shards</strong><span>Publica apenas no broker MQTT</span></article></div><p><b>O <code>mongos</code> fica no PC1</b> e distribui os documentos por shards suportados por, pelo menos, dois computadores. A localização do segundo shard é uma decisão da equipa: pode ser o PC3 ou até um quarto computador, desde que comunique com o <code>mongos</code>. <strong>Será que pode ficar no PC2?</strong> <strong>Se escolher o PC3, este deixa de ser exclusivamente controlador e acumula também o papel de nó MongoDB; a equipa deve justificar esta opção e analisar o impacto de uma falha.</strong> Os config servers e as réplicas são componentes internos do cluster; o simulador conhece apenas o broker MQTT.</p></section>
+<div class="arch-migration"><span>migração incremental · sem duplicados</span><i>↓</i></div>
+<div class="arch-bottom"><section class="pc2-services"><div class="pc-label">PC 2</div><h3>Dados e aplicações</h3><div class="service-chain"><span>MySQL</span><i>→</i><span>PHP / HTML</span><i>→</i><span>Android</span></div><p>Consolida dados relacionais, configurações, alertas e informação para consulta.</p></section><section class="pc3-control"><div class="pc-label">PC 3</div><h3>Controlo e saúde</h3><div class="ssh-links"><span>SSH → PC 1</span><span>SSH → PC 2</span></div><p>Monitoriza processos, conhece os endereços dos restantes computadores e reinicia componentes quando necessário.</p></section></div>
+<div class="cloud-side-flow" aria-label="Acessos dos PC1 e PC2 aos serviços na nuvem"><strong>PC 1 e PC 2</strong><div><span><b>↔</b> consultam e atualizam a MySQL na nuvem</span><span><b>→</b> enviam comandos para os atuadores na nuvem</span></div><em>ligações independentes; não representam comunicação direta entre PC1 e PC2</em></div>
+<div class="arch-legend"><span><i class="mqtt-dot"></i>MQTT: dados e comandos</span><span><i class="cloud-dot"></i>Nuvem: MySQL e atuadores</span><span><i class="ssh-dot"></i>SSH: monitorização e recuperação</span></div>
+</div>
+<aside class="web-interface-note"><div class="web-interface-icon">HTML</div><div><h3>Formulários HTML/PHP da equipa</h3><p>A aplicação deve permitir autenticar os utilizadores, criar ou selecionar uma configuração/simulação, editar os respetivos parâmetros quando a simulação não está a decorrer e gerir o PC3 — nomeadamente iniciar a simulação e acompanhar ou acionar os processos de controlo.</p><p>Os restantes acessos aos dados podem ser feitos diretamente na base de dados ou através de Stored Procedures, de acordo com a solução justificada pela equipa.</p></div></aside>
+<details class="diagram-details">
+<summary>Simulador e Jogador</summary>
+<div class="player-explainer">
+<header><span>IDEIA ESSENCIAL</span><h3>O Jogador é o software construído pela equipa</h3><p>Não é uma pessoa nem faz parte do Simulador. É o conjunto de programas da equipa que observa o que acontece, mantém o seu próprio estado e toma decisões em tempo real.</p></header>
+<div class="player-connection" role="img" aria-label="O servidor Simulador publica dados de sensores no broker MQTT; o Jogador desenvolvido pela equipa recebe-os, processa-os e envia comandos e gatilhos de volta através de MQTT">
+<section class="simulator-box"><small>FORNECIDO PELO DOCENTE · NUVEM</small><h4>Servidor / Simulador</h4><p>Move os marsamis, produz leituras dos sensores e executa as ações pedidas.</p><div class="simulator-parts"><span>Sensores</span><span>Atuadores</span></div></section>
+<div class="mqtt-bridge"><span>sensores →</span><strong>MQTT</strong><span>← comandos</span><em>único canal com o servidor</em></div>
+<section class="player-box"><small>DESENVOLVIDO PELA EQUIPA</small><h4>Jogador</h4><p>Software distribuído que recebe, interpreta, guarda e reage aos dados.</p><div class="player-pcs"><span>PC 1</span><span>PC 2</span><span>PC 3</span></div></section>
+</div>
+<div class="player-cycle"><article><b>1</b><div><strong>Observa</strong><span>Recebe passagens, temperatura, som e estado da simulação.</span></div></article><article><b>2</b><div><strong>Reconstrói e decide</strong><span>Atualiza a localização dos marsamis, deteta situações e escolhe quando atuar.</span></div></article><article><b>3</b><div><strong>Atua</strong><span>Envia comandos para portas e ar condicionado e dispara gatilhos quando odd = even.</span></div></article></div>
+<div class="player-goals"><strong>No fim, o Jogador tem de conseguir:</strong><span>indicar exatamente quantos marsamis odd e even estão em cada sala;</span><span>obter pontos identificando equilíbrios em tempo real;</span><span>ajudar a evitar o fim prematuro da simulação.</span></div>
+<p class="player-separation"><b>Regra de separação:</b> o Servidor mantém a realidade do labirinto; o Jogador constrói a sua visão a partir das mensagens recebidas. A equipa não controla diretamente o Simulador nem acede à sua base de dados interna.</p>
+</div>
+</details>
+</div>
+</section>
+<section id="dados" class="assignment-section">
+<div class="section-number">04</div>
+<div class="section-copy">
+<div class="kicker">Dados e acesso</div>
+<h2>O histórico tem de ser fiável, explicável e protegido</h2>
+<div class="requirements">
+<article>
+<h3>MongoDB</h3>
+<p>Os sensores escrevem em três réplicas. Define coleções, sharding e a estratégia de tolerância a falhas. O sharding tem de ser suportado por, pelo menos, dois PCs, distribuindo efetivamente a informação entre máquinas.</p>
+</article>
+<article>
+<h3>MySQL local</h3>
+<p>Podes evoluir o modelo fornecido. Justifica alterações e atualiza os consumidores Android das tabelas afetadas.</p>
+</article>
+<article>
+<h3>Migração</h3>
+<p>É automática, incremental e em tempo real. O mesmo documento MongoDB não pode ser inserido duas vezes no MySQL.</p>
+</article>
+<article>
+<h3>Privilégios</h3>
+<p>Cada utilizador altera apenas os próprios dados. A equipa mantém as suas simulações; SPs, views e triggers refletem a política de acesso.</p>
+</article>
+</div>
+<div class="database-showcase">
+<details class="reference-details database-card cloud-database" open>
+<summary><span class="database-icon" aria-hidden="true"></span><span class="database-summary"><small>REFERÊNCIA · NUVEM</small><strong>MySQL sempre online</strong><em>Configuração fornecida pelo servidor</em></span><b>CONSULTA</b></summary>
+<div class="reference-body database-body">
+<div class="database-access"><div><small>BASE</small><code>maze</code></div><div><small>SERVIDOR</small><code>194.210.86.10</code></div><div><small>ACESSO</small><code>aluno / aluno</code></div></div>
+<pre>
+<code>mysql --user=aluno --password=aluno --host=194.210.86.10 maze</code>
+</pre>
+<p class="database-purpose"><strong>Para que serve?</strong> Contém a configuração de referência do labirinto. Os valores mantêm-se estáveis durante cada simulação e podem ser consultados pelos programas da equipa.</p>
+<div class="schema-board cloud-schema" aria-label="Estrutura da base MySQL da nuvem"><div class="schema-board-head"><div><small>MODELO DE REFERÊNCIA</small><strong>Configuração do labirinto</strong></div><span>2 tabelas</span></div><div class="cloud-schema-grid">
+<article class="schema-table"><h4>Corridor</h4><ul><li><code>RoomA</code><span>INT</span></li><li><code>RoomB</code><span>INT</span></li></ul><p>Define cada corredor através das duas salas que liga.</p></article>
+<article class="schema-table setup-table"><h4>SetupMaze</h4><ul><li><code>numberrooms</code><span>número de salas</span></li><li><code>numbermarsamis</code><span>número de marsamis</span></li><li class="muted-field"><code>numberplayers</code><span>número de jogadores — irrelevante para as equipas</span></li><li><code>normaltemperature</code><span>temperatura normal do labirinto</span></li><li><code>minimumtemperature</code><span>temperatura mínima permitida</span></li><li><code>maximumtemperature</code><span>temperatura máxima permitida</span></li><li><code>normalnoise</code><span>nível normal de ruído</span></li><li><code>maximumnoise</code><span>ruído máximo permitido</span></li><li><code>sensor_shutdown_no_movement_seconds</code><span>tempo sem movimentos após o qual os sensores param</span></li></ul><p>O último campo permite que os sensores continuem a publicar durante algum tempo depois de terminarem os movimentos.</p></article>
+</div></div>
+</div>
+</details>
+<details class="diagram-details local-database-details database-card local-database">
+<summary><span class="database-icon" aria-hidden="true"></span><span class="database-summary"><small>MODELO DA EQUIPA · PC2</small><strong>MySQL local</strong><em>Histórico consolidado e aplicação</em></span><b>EVOLUTIVA</b></summary>
+<div class="local-database-intro database-body">
+<p class="database-purpose"><strong>A equipa é responsável por esta base.</strong> O modelo inicial pode ser adaptado às decisões do projeto, desde que cada alteração seja justificada.</p>
+<div class="android-warning"><span>ANDROID</span><p>Esta zona é consultada pela aplicação Android; qualquer alteração deve ser refletida nos scripts e na própria aplicação.</p></div>
+<div class="schema-board local-schema" aria-label="Modelo relacional inicial da base de dados local do PC2"><div class="schema-board-head"><div><small>MODELO RELACIONAL INICIAL</small><strong>Dados consolidados no PC2</strong></div><div class="schema-legend"><span><i class="pk-mark"></i>PK</span><span><i class="fk-mark"></i>FK</span><span><i class="android-mark"></i>Android</span></div></div><div class="local-schema-grid">
+<article class="schema-table"><h4>Simulacao</h4><ul><li class="pk"><code>IDSimulacao</code><span>autoincrement</span></li><li><code>Descricao</code><span>TEXT</span></li><li class="fk"><code>Equipa</code><span>INT</span></li><li><code>DataHoraInicio</code><span>TIMESTAMP</span></li></ul></article>
+<article class="schema-table"><h4>MedicoesPassagens</h4><ul><li class="pk"><code>IDMedicao</code><span>autoincrement</span></li><li><code>Hora</code><span>TIMESTAMP</span></li><li><code>SalaOrigem</code><span>INT</span></li><li><code>SalaDestino</code><span>INT</span></li><li><code>Marsami</code><span>INT</span></li><li><code>Status</code><span>INT</span></li></ul></article>
+<article class="schema-table android-table"><h4>Utilizador</h4><ul><li><code>Nome</code><span>VARCHAR(100)</span></li><li><code>Telemovel</code><span>VARCHAR(12)</span></li><li><code>Tipo</code><span>VARCHAR(3)</span></li><li><code>Email</code><span>VARCHAR(50)</span></li><li><code>DataNascimento</code><span>DATE</span></li><li class="fk"><code>Equipa</code><span>INT</span></li></ul></article>
+<article class="schema-table android-table"><h4>Mensagens</h4><ul><li class="pk"><code>ID</code><span>autoincrement</span></li><li><code>Hora</code><span>TIMESTAMP</span></li><li><code>Sala</code><span>INT</span></li><li><code>Sensor</code><span>VARCHAR(10)</span></li><li><code>Leitura</code><span>DECIMAL(6,2)</span></li><li><code>TipoAlerta</code><span>VARCHAR(50)</span></li><li><code>Msg</code><span>VARCHAR(100)</span></li><li><code>HoraEscrita</code><span>TIMESTAMP</span></li></ul></article>
+<div class="schema-stack"><article class="schema-table android-table"><h4>Temperatura</h4><ul><li class="pk"><code>IDTemperatura</code><span>autoincrement</span></li><li><code>Hora</code><span>TIMESTAMP</span></li><li><code>Temperatura</code><span>VARCHAR(12)</span></li><li><code>Sensor</code><span>VARCHAR(10)</span></li></ul></article><article class="schema-table android-table"><h4>Som</h4><ul><li class="pk"><code>IDSom</code><span>autoincrement</span></li><li><code>Hora</code><span>TIMESTAMP</span></li><li><code>Som</code><span>VARCHAR(12)</span></li><li><code>Sensor</code><span>VARCHAR(10)</span></li></ul></article></div>
+<article class="schema-table android-table"><h4>OcupacaoLabirinto</h4><ul><li class="fk"><code>IDSimulacao</code><span>INT</span></li><li><code>NumeroMarsamisOdd</code><span>INT</span></li><li><code>NumeroMarsamisEven</code><span>INT</span></li><li class="pk"><code>Sala</code><span>INT</span></li></ul></article>
+</div><div class="schema-extension"><span>＋</span><p><strong>Tabelas adicionais</strong> podem ser criadas para suportar as decisões da equipa.</p></div></div>
+</div>
+</details>
+</div>
+</div>
+</section>
+<section id="mqtt" class="assignment-section">
+<div class="section-number">05</div>
+<div class="section-copy">
+<div class="kicker">Contrato de mensagens</div>
+<h2>MQTT liga sensores, decisões e atuadores</h2>
+<p class="message-reading"><strong>Há dois sentidos de comunicação.</strong> Para atuar no labirinto, o cliente faz <em>publish</em> no tópico comum <code>pisid_mazeact</code> e o servidor recebe a mensagem no seu <em>on message arrived</em>. No sentido contrário, o servidor faz <em>publish</em> dos dados e resultados nos tópicos do player; o cliente subscreve esses tópicos e recebe as mensagens no seu <em>on message arrived</em>. Nas designações abaixo, <code>n</code> deve ser substituído pelo número do player: por exemplo, <code>pisid_mazetemp_7</code>.</p>
+<div class="topic-grid">
+<article class="wide actuator">
+<code>pisid_mazeact · cliente → servidor</code>
+<h3>1. O cliente publica comandos; o servidor recebe-os</h3>
+<pre>
+<code>{"Action":"Score", "Player":1, "Room":2}
+{"Action":"OpenDoor", "Player":1, "RoomOrigin":3, "RoomDestiny":2}
+{"Action":"CloseDoor", "Player":1, "RoomOrigin":3, "RoomDestiny":2}
+{"Action":"CloseAllDoor", "Player":1} · {"Action":"OpenAllDoor", "Player":1}
+{"Action":"AcOn", "Player":1} · {"Action":"AcOff", "Player":1}</code>
+</pre>
+<p>Este tópico é comum a todos. Cada servidor lê o campo <code>Player</code> e ignora os comandos destinados aos outros players.</p>
+</article>
+<article class="wide">
+<code>pisid_mazeact_result_n · servidor → cliente</code>
+<h3>2. O servidor publica o resultado; o cliente recebe-o</h3>
+<pre>
+<code>{"Player":1,"Action":"Score","Result":"CORRECT","Room":2,"MarsamisOdd":3,"MarsamisEven":3,"ScoreDelta":1.0,"TotalScore":2.5,"Attempt":2,"MaximumAttempts":3,"Hour":"2024-07-04 16:29:21.281898"}</code>
+</pre>
+<p>O cliente subscreve o tópico do seu player. <code>Result</code> pode indicar <code>APPLIED</code>, <code>NO_CHANGE</code>, <code>CORRECT</code>, <code>WRONG</code> ou <code>REJECTED</code>, conforme a ação.</p>
+</article>
+<article class="wide">
+<code>pisid_mazestatus_n · servidor → cliente</code>
+<h3>Estado da simulação</h3>
+<p>O cliente subscreve este tópico para receber <code>SIMULATION_STARTED</code>, <code>MOVEMENT_SIMULATION_FINISHED</code>, <code>SENSORS_FINISHED</code> e <code>SIMULATION_FINISHED</code>. Assim, o fim dos movimentos não é confundido com o fim das leituras.</p>
+</article>
+<article>
+<code>pisid_mazesound_n · servidor → cliente</code>
+<h3>Ruído</h3>
+<pre>
+<code>{"Player":11,"Sensor":"sound_zone_1","Zone":"Zone 1","Hour":"2024-07-04 16:29:21.281898","Sound":19.0}</code>
+</pre>
+</article>
+<article>
+<code>pisid_mazetemp_n · servidor → cliente</code>
+<h3>Temperatura</h3>
+<pre>
+<code>{"Player":11,"Sensor":"temp_zone_1","Zone":"Zone 1","Hour":"2024-07-04 16:29:21.281898","Temperature":19.0}</code>
+</pre>
+</article>
+<article class="wide">
+<code>pisid_mazemov_n · servidor → cliente</code>
+<h3>Movimento</h3>
+<pre>
+<code>{"Player":10,"Marsami":40,"RoomOrigin":3,"RoomDestiny":5,"Hour":"2024-07-04 16:29:21.281898","Status":1}</code>
+</pre>
+<p class="message-reading"><strong>Como ler o exemplo:</strong> o marsami 40 saiu da sala 3 e entrou na sala 5. <code>Player: 10</code> identifica o labirinto. <code>Status: 1</code> indica uma passagem normal.</p>
+<p><strong>Status 1:</strong> passagem normal · <strong>Status 0:</strong> sem saída · <strong>Status 2:</strong> cansaço. Origem 0 representa a largada inicial.</p>
+</article>
+</div>
+<div class="command-line">
+<span>Arrancar o simulador</span>
+<code>./pymaze numero_player</code>
+<p>Exemplo: <code>./pymaze 7</code>. Para ver toda a informação no terminal: <code>./pymaze 7 --log-level 3 --log-categories ALL</code>.</p>
+<div class="flag-guide">
+<strong>Precisas de outro tipo de mensagens ou de testar sem MQTT?</strong>
+<span>O <a href="guia-maze.html" target="_blank" rel="noopener">assistente de execução do Maze Simulator</a> explica apenas as opções disponíveis ao aluno, constrói o comando e deixa-o pronto para copiar.</span>
+</div>
+</div>
+</div>
+</section>
+<section id="android" class="assignment-section">
+<div class="section-number">06</div>
+<div class="section-copy">
+<div class="kicker">Experiência móvel</div>
+<h2>O telemóvel transforma dados técnicos em informação útil</h2>
+<p class="lead">A aplicação Android deve permitir iniciar sessão e acompanhar a ocupação odd/even por sala, temperatura, ruído e alertas de perigo.</p>
+<div class="phone-gallery">
+<figure>
+<img src="assets/enunciado/android-login.png" alt="Login Android">
+<figcaption>Autenticação</figcaption>
+</figure>
+<figure>
+<img src="assets/enunciado/android-alertas.png" alt="Alertas Android">
+<figcaption>Alertas</figcaption>
+</figure>
+<figure>
+<img src="assets/enunciado/android-barras.png" alt="Ocupação por sala">
+<figcaption>Odd / even</figcaption>
+</figure>
+<figure>
+<img src="assets/enunciado/android-limites.png" alt="Limites ambientais">
+<figcaption>Limites e risco</figcaption>
+</figure>
+<figure>
+<img src="assets/enunciado/android-evolucao.png" alt="Evolução temporal">
+<figcaption>Evolução</figcaption>
+</figure>
+</div>
+<div class="chart-pair">
+<figure>
+<img src="assets/enunciado/temperatura.png" alt="Evolução da temperatura">
+<figcaption>Temperatura</figcaption>
+</figure>
+<figure>
+<img src="assets/enunciado/ruido.png" alt="Evolução do ruído">
+<figcaption>Ruído</figcaption>
+</figure>
+</div>
+<p class="muted">Os valores das imagens são ilustrativos; mostram apenas o tipo de leitura esperado.</p>
+</div>
+</section>
+<section id="criterios" class="assignment-section final-check">
+<div class="section-number">07</div>
+<div class="section-copy">
+<div class="kicker">Antes de considerares terminado</div>
+<h2>O sistema deve manter-se correto mesmo quando ocorrem falhas</h2>
+<div class="check-grid">
+<article>
+<b>✓</b>
+<span>Dados distribuídos por três computadores e duas tecnologias.</span>
+</article>
+<article>
+<b>✓</b>
+<span>Falhas de MongoDB, MySQL ou processos não destroem o serviço.</span>
+</article>
+<article>
+<b>✓</b>
+<span>Migração incremental, reiniciável e sem duplicados.</span>
+</article>
+<article>
+<b>✓</b>
+<span>Anómalos, outliers e alertas detetados e encaminhados.</span>
+</article>
+<article>
+<b>✓</b>
+<span>Atuadores e gatilhos com racional claro e verificável.</span>
+</article>
+<article>
+<b>✓</b>
+<span>PC 3 monitoriza a saúde e reinicia componentes.</span>
+</article>
+<article>
+<b>✓</b>
+<span>Permissões impedem alterações a dados de terceiros.</span>
+</article>
+<article>
+<b>✓</b>
+<span>Entradas são validadas e as consultas estão protegidas contra SQL injection e outros ataques que exponham dados ou comprometam o sistema.</span>
+</article>
+<article>
+<b>✓</b>
+<span>Android apresenta ocupação, ruído, temperatura e alertas.</span>
+</article>
+</div>
+<blockquote>Há requisitos propositadamente abertos. Identifica as decisões, discute-as em equipa, regista o racional e testa as consequências.<strong> Prepara uma solução flexível: é provável que, ao longo do projeto, surjam alterações à especificação.</strong></blockquote>
+</div>
+</section>
+<section id="primeiros-passos" class="assignment-section technology-intro">
+<div class="section-number">08</div><div class="section-copy"><div class="kicker">Não precisas de saber tudo à partida</div><h2>Algumas tecnologias serão novidade — faz parte do desafio</h2>
+<p class="lead">MongoDB, MQTT, privilégios de utilizadores em MySQL e SSH são matérias tecnológicas novas para muitos alunos. Não se espera que já as domines: começa pelo conceito, experimenta o exemplo mínimo e evolui a solução com a tua equipa.</p>
+<div class="technology-cards">
+<a href="enunciado.html#dados"><span class="tech-symbol mongo-symbol">{ }</span><div><small>DADOS NÃO RELACIONAIS</small><strong>MongoDB</strong><p>Documentos, coleções, réplicas e sharding.</p></div><b>Ver explicação →</b></a>
+<a href="enunciado.html#mqtt"><span class="tech-symbol mqtt-symbol">⌁</span><div><small>MENSAGERIA</small><strong>MQTT</strong><p>Publicar e receber mensagens através de tópicos.</p></div><b>Ver explicação →</b></a>
+<a href="enunciado.html#dados"><span class="tech-symbol mysql-symbol">SQL</span><div><small>SEGURANÇA</small><strong>Privilégios MySQL</strong><p>Dar a cada utilizador apenas as permissões necessárias.</p></div><b>Ver explicação →</b></a>
+<a href="enunciado.html#arquitetura"><span class="tech-symbol ssh-symbol">&gt;_</span><div><small>OPERAÇÃO REMOTA</small><strong>SSH</strong><p>Executar e monitorizar processos noutro computador.</p></div><b>Ver explicação →</b></a>
+</div></div></section>
+</main>
+</div>
+<script src="assets/app.js">
+</script>
+</body>
+</html>
